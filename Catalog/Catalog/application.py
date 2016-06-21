@@ -22,16 +22,15 @@ from xml.etree.ElementTree import Element, SubElement, Comment, tostring
 app = Flask(__name__)
 
 # Connect to Database and create database session
-#engine = create_engine('sqlite:///catalogwithusers.db')
-engine = create_engine('postgresql://catalog:catalog@localhost/catalog')
+engine = create_engine('sqlite:///catalogwithusers.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 # OAUTH CLIENT_ID GOOGLE
-APP_PATH = '/var/www/Catalog/Catalog/'
-CLIENT_ID = json.loads( open('/var/www/Catalog/Catalog/client_secrets.json', 'r').read())['web']['client_id']
+
+CLIENT_ID = json.loads( open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Catalog Application"
 
 # The login and authorization taken from the OAuth Class exercise
@@ -56,7 +55,7 @@ def gconnect():
 
     try:
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets('/var/www/Catalog/Catalog/client_secrets.json', scope='')
+        oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
